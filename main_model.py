@@ -287,7 +287,6 @@ class CSDI_Physio(CSDI_base):
         )
 
 
-
 class CSDI_Forecasting(CSDI_base):
     def __init__(self, config, device, target_dim):
         super(CSDI_Forecasting, self).__init__(target_dim, config, device)
@@ -307,7 +306,7 @@ class CSDI_Forecasting(CSDI_base):
         cut_length = torch.zeros(len(observed_data)).long().to(self.device)
         for_pattern_mask = observed_mask
 
-        feature_id=torch.arange(self.target_dim_base).unsqueeze(0).expand(observed_data.shape[0],-1).to(self.device)
+        feature_id = torch.arange(self.target_dim_base).unsqueeze(0).expand(observed_data.shape[0], -1).to(self.device)
 
         return (
             observed_data,
@@ -392,8 +391,6 @@ class CSDI_Forecasting(CSDI_base):
         loss_func = self.calc_loss if is_train == 1 else self.calc_loss_valid
 
         return loss_func(observed_data, cond_mask, observed_mask, side_info, is_train)
-
-
 
     def evaluate(self, batch, n_samples):
         (

@@ -112,7 +112,7 @@ def calc_quantile_CRPS_sum(target, forecast, eval_points, mean_scaler, scaler):
     denom = calc_denominator(target, eval_points)
     CRPS = 0
     for i in range(len(quantiles)):
-        q_pred = torch.quantile(forecast.sum(-1),quantiles[i],dim=1)
+        q_pred = torch.quantile(forecast.sum(-1), quantiles[i], dim=1)
         q_loss = quantile_loss(target, q_pred, quantiles[i], eval_points)
         CRPS += q_loss / denom
     return CRPS.item() / len(quantiles)
@@ -151,7 +151,7 @@ def evaluate(model, test_loader, nsample=100, scaler=1, mean_scaler=0, foldernam
                     ((samples_median.values - c_target) * eval_points) ** 2
                 ) * (scaler ** 2)
                 mae_current = (
-                    torch.abs((samples_median.values - c_target) * eval_points) 
+                    torch.abs((samples_median.values - c_target) * eval_points)
                 ) * scaler
 
                 mse_total += mse_current.sum().item()

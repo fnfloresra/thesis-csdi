@@ -11,9 +11,9 @@ def get_torch_trans(heads=8, layers=1, channels=64):
     )
     return nn.TransformerEncoder(encoder_layer, num_layers=layers)
 
-def get_linear_trans(heads=8,layers=1,channels=64,localheads=0,localwindow=0):
+def get_linear_trans(heads=8, layers=1, channels=64, localheads=0, localwindow=0):
 
-  return LinearAttentionTransformer(
+    return LinearAttentionTransformer(
         dim = channels,
         depth = layers,
         heads = heads,
