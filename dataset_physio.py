@@ -136,7 +136,7 @@ class Physio_Dataset(Dataset):
             "./data/physio_missing" + str(missing_ratio) + "_seed" + str(seed) + ".pk"
         )
 
-        if os.path.isfile(path) == False:  # if datasetfile is none, create
+        if not os.path.isfile(path):  # if datasetfile is none, create
             idlist = get_idlist()
             for id_ in idlist:
                 try:

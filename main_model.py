@@ -36,7 +36,7 @@ class CSDI_base(nn.Module):
         self.target_strategy = config["model"]["target_strategy"]
 
         self.emb_total_dim = self.emb_time_dim + self.emb_feature_dim
-        if self.is_unconditional == False:
+        if not self.is_unconditional:
             self.emb_total_dim += 1  # for conditional mask
         self.embed_layer = nn.Embedding(
             num_embeddings=self.target_dim, embedding_dim=self.emb_feature_dim
@@ -159,7 +159,7 @@ class CSDI_base(nn.Module):
         side_info = torch.cat([time_embed, feature_embed], dim=-1)  # (B,L,K,*)
         side_info = side_info.permute(0, 3, 2, 1)  # (B,*,K,L)
 
-        if self.is_unconditional == False:
+        if not self.is_unconditional:
             side_mask = cond_mask.unsqueeze(1)  # (B,1,K,L)
             side_info = torch.cat([side_info, side_mask], dim=1)
 
@@ -234,7 +234,7 @@ class CSDI_base(nn.Module):
         Returns:
             Input tensor for the diffusion model
         """
-        if self.is_unconditional == True:
+        if self.is_unconditional:
             total_input = noisy_data.unsqueeze(1)  # (B,1,K,L)
         else:
             cond_obs = (cond_mask * observed_data).unsqueeze(1)
@@ -261,7 +261,7 @@ class CSDI_base(nn.Module):
 
         for i in range(n_samples):
             # generate noisy observation for unconditional model
-            if self.is_unconditional == True:
+            if self.is_unconditional:
                 noisy_obs = observed_data
                 noisy_cond_history = []
                 for t in range(self.num_steps):
@@ -272,7 +272,7 @@ class CSDI_base(nn.Module):
             current_sample = torch.randn_like(observed_data)
 
             for t in range(self.num_steps - 1, -1, -1):
-                if self.is_unconditional == True:
+                if self.is_unconditional:
                     diff_input = cond_mask * noisy_cond_history[t] + (1.0 - cond_mask) * current_sample
                     diff_input = diff_input.unsqueeze(1)  # (B,1,K,L)
                 else:
@@ -566,7 +566,7 @@ class CSDI_Forecasting(CSDI_base):
         side_info = torch.cat([time_embed, feature_embed], dim=-1)  # (B,L,K,*)
         side_info = side_info.permute(0, 3, 2, 1)  # (B,*,K,L)
 
-        if self.is_unconditional == False:
+        if not self.is_unconditional:
             side_mask = cond_mask.unsqueeze(1)  # (B,1,K,L)
             side_info = torch.cat([side_info, side_mask], dim=1)
 
